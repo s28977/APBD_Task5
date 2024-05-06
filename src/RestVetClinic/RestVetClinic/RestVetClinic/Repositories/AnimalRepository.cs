@@ -7,7 +7,6 @@ public class AnimalRepository : IAnimalRepository
     private readonly List<Animal> _animals = [];
     public bool Add(Animal animal)
     {
-
         if (_animals.Exists(a => a.Id == animal.Id)) return false;
         _animals.Add(animal);
         return true;
@@ -23,6 +22,7 @@ public class AnimalRepository : IAnimalRepository
 
     public bool Edit(int id, Animal animal)
     {
+        if (id != animal.Id) return false;
         var animalToEdit = _animals.FirstOrDefault(a => a.Id == id);
         if (animalToEdit == null) return false;
         _animals.Remove(animalToEdit);

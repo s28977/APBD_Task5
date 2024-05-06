@@ -14,7 +14,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();   
+    app.UseSwagger();
     app.UseSwaggerUI();
 }
 
@@ -39,6 +39,12 @@ app.MapDelete("/animals/{id:int}", (IAnimalRepository animalRepository, int id) 
     ? Results.NoContent()
     : Results.BadRequest($"Animal with id {id} was not found")).WithName("DeleteAnimal").WithOpenApi();
 
+app.MapPut("/animals/{id:int}", (IAnimalRepository animalRepository, int id, Animal animal) =>
+        animalRepository.Edit(id, animal)
+            ? Results.NoContent()
+            : Results.BadRequest(
+                $"Animal with id {id} was not found or the id in url segment doesn't match the id in http body."))
+    .WithName("EditAnimal").WithOpenApi();
 
 
 app.Run();
