@@ -46,5 +46,4 @@ app.MapPut("/animals/{id:int}", (IAnimalRepository animalRepository, int id, Ani
                 $"Animal with id {id} was not found or the id in url segment doesn't match the id in http body."))
     .WithName("EditAnimal").WithOpenApi();
 
-
 app.Run();
