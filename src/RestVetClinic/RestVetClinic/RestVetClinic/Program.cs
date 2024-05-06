@@ -23,12 +23,10 @@ app.MapGet("/animals", (IAnimalRepository animalRepository) => Results.Ok(animal
     .WithName("GetAnimals")
     .WithOpenApi();
 
+app.MapGet("/animals/{id:int}", (IAnimalRepository animalRepository, int id) =>
+{
+    var animal = animalRepository.Get(id);
+    return (animal == null) ? Results.NotFound($"Animal with id {id} was not found") : Results.Ok(animal);
+}).WithName("GetAnimal").WithOpenApi();
+
 app.Run();
-
-
-
-
-
-
-
-
