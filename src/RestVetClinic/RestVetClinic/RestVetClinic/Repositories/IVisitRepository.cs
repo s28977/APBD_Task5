@@ -4,6 +4,6 @@ namespace RestVetClinic.Repositories;
 
 public interface IVisitRepository
 {
-    void Add(Visit visit);
+    bool Add(IAnimalRepository animalRepository, Visit visit);
     IEnumerable<Visit>? GetForAnimal(IAnimalRepository animalRepository, int animalId);
 }
