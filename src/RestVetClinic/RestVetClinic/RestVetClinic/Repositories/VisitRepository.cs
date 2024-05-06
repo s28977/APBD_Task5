@@ -4,17 +4,23 @@ namespace RestVetClinic.Repositories;
 
 public class VisitRepository : IVisitRepository
 {
+    private readonly IAnimalRepository _animalRepository;
     private readonly List<Visit> _visits = [];
 
-    public bool Add(IAnimalRepository animalRepository, Visit visit)
+    public VisitRepository(IAnimalRepository animalRepository)
     {
-        if (animalRepository.Get(visit.AnimalId) == null) return false;
+        _animalRepository = animalRepository;
+    }
+
+    public bool Add(Visit visit)
+    {
+        if (_animalRepository.Get(visit.AnimalId) == null) return false;
         _visits.Add(visit);
         return true;
     }
 
-    public IEnumerable<Visit>? GetForAnimal(IAnimalRepository animalRepository, int animalId)
+    public IEnumerable<Visit>? GetForAnimal(int animalId)
     {
-        return animalRepository.Get(animalId) == null ? null : _visits.FindAll(visit => visit.AnimalId == animalId);
+        return _animalRepository.Get(animalId) == null ? null : _visits.FindAll(visit => visit.AnimalId == animalId);
     }
 }

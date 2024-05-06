@@ -10,6 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IAnimalRepository, AnimalRepository>();
 builder.Services.AddSingleton<IVisitRepository, VisitRepository>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,13 +48,13 @@ app.MapPut("/animals/{id:int}", (IAnimalRepository animalRepository, int id, Ani
                 $"Animal with id {id} was not found or the id in url segment doesn't match the id in http body."))
     .WithName("EditAnimal").WithOpenApi();
     
-app.MapPost("/visits", (IAnimalRepository animalRepository, IVisitRepository visitRepository, Visit visit) => visitRepository.Add(animalRepository, visit)
+app.MapPost("/visits", (IVisitRepository visitRepository, Visit visit) => visitRepository.Add(visit)
     ? Results.Created()
     : Results.NotFound($"Animal with id {visit.AnimalId} was not found.")).WithName("AddVisit").WithOpenApi();
 
-app.MapGet("/visits/{animalId:int}", (IAnimalRepository animalRepository,  IVisitRepository visitRepository, int animalId) =>
+app.MapGet("/visits/{animalId:int}", (IVisitRepository visitRepository, int animalId) =>
 {
-    var visit = visitRepository.GetForAnimal(animalRepository, animalId);
+    var visit = visitRepository.GetForAnimal(animalId);
     return (visit == null) ? Results.NotFound($"Animal with id {animalId} was not found.") : Results.Ok(visit);
 }).WithName("GetVisit").WithOpenApi();
 
