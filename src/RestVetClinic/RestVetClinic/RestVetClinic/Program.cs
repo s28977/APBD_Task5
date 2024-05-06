@@ -21,7 +21,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapPost("/animals", (IAnimalRepository animalRepository, Animal animal) => animalRepository.Add(animal)
-    ? Results.StatusCode(StatusCodes.Status201Created)
+    ? Results.Created()
     : Results.BadRequest($"Animal with id {animal.Id} already exists")).WithName("AddAnimal").WithOpenApi();
 
 
@@ -34,6 +34,10 @@ app.MapGet("/animals/{id:int}", (IAnimalRepository animalRepository, int id) =>
     var animal = animalRepository.Get(id);
     return (animal == null) ? Results.NotFound($"Animal with id {id} was not found") : Results.Ok(animal);
 }).WithName("GetAnimal").WithOpenApi();
+
+app.MapDelete("/animals/{id:int}", (IAnimalRepository animalRepository, int id) => animalRepository.Delete(id)
+    ? Results.NoContent()
+    : Results.BadRequest($"Animal with id {id} was not found")).WithName("DeleteAnimal").WithOpenApi();
 
 
 
